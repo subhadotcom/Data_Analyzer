@@ -1,0 +1,19 @@
+[server]
+headless = false
+address = "localhost"
+port = 8501
+maxUploadSize = 200
+enableCORS = false
+enableXsrfProtection = false
+
+[theme]
+base = "dark"
+
+[browser]
+gatherUsageStats = false
+
+[global]
+showWarningOnDirectExecution = false
+
+[client]
+showErrorDetails = false

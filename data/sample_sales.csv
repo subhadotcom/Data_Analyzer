@@ -1,0 +1,51 @@
+Date,Product,Category,Sales_Amount,Quantity,Customer_ID,Region,Sales_Rep
+2023-01-15,Laptop,Electronics,1200,1,C001,North,John
+2023-01-16,Mouse,Electronics,25,2,C002,South,Jane
+2023-01-17,Coffee Maker,Appliances,150,1,C003,East,Bob
+2023-01-18,Keyboard,Electronics,75,1,C004,West,Alice
+2023-01-19,Toaster,Appliances,80,1,C005,North,John
+2023-01-20,Monitor,Electronics,300,1,C006,South,Jane
+2023-01-21,Blender,Appliances,120,1,C007,East,Bob
+2023-01-22,Smartphone,Electronics,800,1,C008,West,Alice
+2023-01-23,Microwave,Appliances,200,1,C009,North,John
+2023-01-24,Tablet,Electronics,400,1,C010,South,Jane
+2023-01-25,Dishwasher,Appliances,600,1,C011,East,Bob
+2023-01-26,Headphones,Electronics,100,2,C012,West,Alice
+2023-01-27,Vacuum,Appliances,250,1,C013,North,John
+2023-01-28,Printer,Electronics,180,1,C014,South,Jane
+2023-01-29,Air Fryer,Appliances,180,1,C015,East,Bob
+2023-01-30,Speaker,Electronics,150,1,C016,West,Alice
+2023-02-01,Refrigerator,Appliances,1000,1,C017,North,John
+2023-02-02,Webcam,Electronics,80,1,C018,South,Jane
+2023-02-03,Washing Machine,Appliances,800,1,C019,East,Bob
+2023-02-04,Router,Electronics,120,1,C020,West,Alice
+2023-02-05,Dryer,Appliances,700,1,C021,North,John
+2023-02-06,Smart TV,Electronics,900,1,C022,South,Jane
+2023-02-07,Food Processor,Appliances,200,1,C023,East,Bob
+2023-02-08,Gaming Console,Electronics,500,1,C024,West,Alice
+2023-02-09,Rice Cooker,Appliances,100,1,C025,North,John
+2023-02-10,Smartwatch,Electronics,250,1,C026,South,Jane
+2023-02-11,Stand Mixer,Appliances,300,1,C027,East,Bob
+2023-02-12,External HDD,Electronics,120,1,C028,West,Alice
+2023-02-13,Juice Extractor,Appliances,150,1,C029,North,John
+2023-02-14,Fitness Tracker,Electronics,180,1,C030,South,Jane
+2023-02-15,Espresso Machine,Appliances,400,1,C031,East,Bob
+2023-02-16,Drone,Electronics,600,1,C032,West,Alice
+2023-02-17,Slow Cooker,Appliances,90,1,C033,North,John
+2023-02-18,Digital Camera,Electronics,700,1,C034,South,Jane
+2023-02-19,Electric Kettle,Appliances,50,1,C035,East,Bob
+2023-02-20,VR Headset,Electronics,400,1,C036,West,Alice
+2023-02-21,Bread Maker,Appliances,120,1,C037,North,John
+2023-02-22,Power Bank,Electronics,40,2,C038,South,Jane
+2023-02-23,Ice Maker,Appliances,300,1,C039,East,Bob
+2023-02-24,Bluetooth Speaker,Electronics,80,1,C040,West,Alice
+2023-02-25,Dehumidifier,Appliances,250,1,C041,North,John
+2023-02-26,Wireless Charger,Electronics,35,1,C042,South,Jane
+2023-02-27,Humidifier,Appliances,120,1,C043,East,Bob
+2023-02-28,Action Camera,Electronics,300,1,C044,West,Alice
+2023-03-01,Electric Grill,Appliances,200,1,C045,North,John
+2023-03-02,USB Drive,Electronics,20,3,C046,South,Jane
+2023-03-03,Pressure Cooker,Appliances,150,1,C047,East,Bob
+2023-03-04,Mechanical Keyboard,Electronics,120,1,C048,West,Alice
+2023-03-05,Food Dehydrator,Appliances,180,1,C049,North,John
+2023-03-06,Graphics Card,Electronics,600,1,C050,South,Jane
