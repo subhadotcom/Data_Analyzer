@@ -91,16 +91,6 @@ This is an Interactive Exploratory Data Analysis (EDA) application built with St
 - Configured for external access (0.0.0.0 binding)
 - Light theme as default user interface
 
-## Changelog
-
-- June 22, 2025: Initial EDA application setup with Streamlit
-- June 22, 2025: Added comprehensive localhost configuration and setup guides
-- June 22, 2025: Removed complex setup script, created simple run_localhost.py
-- June 22, 2025: Fixed file upload permissions and localhost configuration
-- June 22, 2025: Streamlined localhost setup to 2 simple steps
-- June 22, 2025: Enhanced run_localhost.py with automatic dependency checking and installation
-- June 22, 2025: Created comprehensive LOCALHOST_SETUP_GUIDE.md with troubleshooting
-
 ## User Preferences
 
 - Preferred communication style: Simple, everyday language
