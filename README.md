@@ -81,12 +81,6 @@ This is an Interactive Exploratory Data Analysis (EDA) application built with St
 
 ## Deployment Strategy
 
-### Replit Configuration
-- **Deployment Target**: Autoscale deployment for automatic scaling
-- **Runtime**: Python 3.11 with Nix package management
-- **Port Configuration**: Streamlit server on port 5000
-- **Workflow**: Parallel execution with dedicated Streamlit server process
-
 ### Environment Setup
 - Uses Nix stable channel (24_05) for reproducible environments
 - Comprehensive system package installation for visualization dependencies
