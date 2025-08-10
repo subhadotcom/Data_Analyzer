@@ -81,12 +81,6 @@ This is an Interactive Exploratory Data Analysis (EDA) application built with St
 
 ## Deployment Strategy
 
-### Replit Configuration
-- **Deployment Target**: Autoscale deployment for automatic scaling
-- **Runtime**: Python 3.11 with Nix package management
-- **Port Configuration**: Streamlit server on port 5000
-- **Workflow**: Parallel execution with dedicated Streamlit server process
-
 ### Environment Setup
 - Uses Nix stable channel (24_05) for reproducible environments
 - Comprehensive system package installation for visualization dependencies
@@ -96,16 +90,6 @@ This is an Interactive Exploratory Data Analysis (EDA) application built with St
 - Headless server mode for production deployment
 - Configured for external access (0.0.0.0 binding)
 - Light theme as default user interface
-
-## Changelog
-
-- June 22, 2025: Initial EDA application setup with Streamlit
-- June 22, 2025: Added comprehensive localhost configuration and setup guides
-- June 22, 2025: Removed complex setup script, created simple run_localhost.py
-- June 22, 2025: Fixed file upload permissions and localhost configuration
-- June 22, 2025: Streamlined localhost setup to 2 simple steps
-- June 22, 2025: Enhanced run_localhost.py with automatic dependency checking and installation
-- June 22, 2025: Created comprehensive LOCALHOST_SETUP_GUIDE.md with troubleshooting
 
 ## User Preferences
 
