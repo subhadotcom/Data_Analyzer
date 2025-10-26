@@ -1,13 +1,35 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import os
-from data_utils import load_sample_data, get_dataset_info, handle_missing_values
-from visualization_utils import create_histogram, create_boxplot, create_scatter_plot, create_correlation_heatmap, create_distribution_plot
+"""
+Interactive Exploratory Data Analysis (EDA) Application
+A comprehensive Streamlit app for data analysis and visualization.
+Provides tools for dataset overview, statistical analysis, missing value detection,
+and various visualization techniques including histograms, box plots, scatter plots,
+correlation heatmaps, and distribution analysis.
+"""
 
-# Set page configuration
+# Standard library imports
+import os
+
+# Third-party imports
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import streamlit as st
+
+# Local imports
+from data_utils import load_sample_data, get_dataset_info, handle_missing_values
+from visualization_utils import (
+    create_histogram, 
+    create_boxplot, 
+    create_scatter_plot, 
+    create_correlation_heatmap, 
+    create_distribution_plot
+)
+
+# =============================================================================
+# PAGE CONFIGURATION
+# =============================================================================
+
 st.set_page_config(
     page_title="Interactive EDA Application",
     page_icon="📊",
@@ -15,18 +37,32 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Set matplotlib and seaborn style
+# Configure visualization styles
 plt.style.use('default')
 sns.set_palette("husl")
 
+# =============================================================================
+# MAIN APPLICATION FUNCTION
+# =============================================================================
+
 def main():
+    """
+    Main application function that orchestrates the entire EDA workflow.
+    Handles data loading, UI setup, and navigation between analysis sections.
+    """
     st.title("📊 Interactive Exploratory Data Analysis")
-    st.markdown("Upload your dataset or use sample data to perform comprehensive EDA")
+    st.markdown(
+        "Upload your dataset or use sample data to perform comprehensive EDA. "
+        "Explore data patterns, detect anomalies, and generate insightful visualizations."
+    )
     
-    # Sidebar for data selection
+    # =============================================================================
+    # SIDEBAR DATA SELECTION
+    # =============================================================================
+    
     st.sidebar.header("Data Selection")
     
-    # Data source selection
+    # Data source selection (upload vs sample)
     data_source = st.sidebar.radio(
         "Choose data source:",
         ["Upload CSV", "Use Sample Dataset"]
@@ -34,11 +70,12 @@ def main():
     
     df = None
     
+    # Handle CSV file upload
     if data_source == "Upload CSV":
         uploaded_file = st.sidebar.file_uploader(
             "Choose a CSV file",
             type="csv",
-            help="Upload a CSV file to analyze"
+            help="Upload a CSV file to analyze. File should contain structured data with headers."
         )
         
         if uploaded_file is not None:
@@ -48,13 +85,15 @@ def main():
                 st.sidebar.write(f"Shape: {df.shape}")
             except Exception as e:
                 st.sidebar.error(f"Error loading file: {str(e)}")
-                st.error("Please upload a valid CSV file.")
+                st.error("Please upload a valid CSV file with proper formatting.")
                 return
     
+    # Handle sample dataset selection
     else:  # Use Sample Dataset
         sample_dataset = st.sidebar.selectbox(
             "Select sample dataset:",
-            ["Sales Data", "Iris Dataset", "Housing Data"]
+            ["Sales Data", "Iris Dataset", "Housing Data"],
+            help="Choose from pre-loaded sample datasets for demonstration"
         )
         
         try:
@@ -65,8 +104,12 @@ def main():
             st.sidebar.error(f"Error loading sample dataset: {str(e)}")
             return
     
+    # =============================================================================
+    # MAIN ANALYSIS INTERFACE
+    # =============================================================================
+    
     if df is not None:
-        # Main analysis sections
+        # Create tabbed interface for different analysis sections
         tab1, tab2, tab3, tab4, tab5 = st.tabs([
             "📋 Dataset Overview", 
             "📊 Descriptive Statistics", 
@@ -75,27 +118,44 @@ def main():
             "🎯 Targeted Analysis"
         ])
         
+        # Dataset overview tab
         with tab1:
             show_dataset_overview(df)
         
+        # Descriptive statistics tab
         with tab2:
             show_descriptive_statistics(df)
         
+        # Missing values analysis tab
         with tab3:
             show_missing_values_analysis(df)
         
+        # Visualizations tab
         with tab4:
             show_visualizations(df)
         
+        # Targeted analysis tab
         with tab5:
             show_targeted_analysis(df)
     
     else:
         st.info("👆 Please upload a CSV file or select a sample dataset from the sidebar to begin analysis.")
 
+# =============================================================================
+# DATASET OVERVIEW FUNCTIONS
+# =============================================================================
+
 def show_dataset_overview(df):
+    """
+    Display comprehensive overview of the dataset including basic metrics,
+    column information, and sample data.
+    
+    Args:
+        df (pd.DataFrame): Input dataframe to analyze
+    """
     st.header("Dataset Overview")
     
+    # Display key metrics in columns
     col1, col2, col3 = st.columns(3)
     
     with col1:
@@ -107,26 +167,39 @@ def show_dataset_overview(df):
     with col3:
         st.metric("Memory Usage", f"{df.memory_usage(deep=True).sum() / 1024:.2f} KB")
     
+    # Display column information
     st.subheader("Column Information")
     col_info = get_dataset_info(df)
     st.dataframe(col_info, use_container_width=True)
     
+    # Display sample data
     st.subheader("First 10 Rows")
     st.dataframe(df.head(10), use_container_width=True)
     
     st.subheader("Last 10 Rows")
     st.dataframe(df.tail(10), use_container_width=True)
 
+# =============================================================================
+# DESCRIPTIVE STATISTICS FUNCTIONS
+# =============================================================================
+
 def show_descriptive_statistics(df):
+    """
+    Display comprehensive descriptive statistics for both numerical
+    and categorical variables in the dataset.
+    
+    Args:
+        df (pd.DataFrame): Input dataframe to analyze
+    """
     st.header("Descriptive Statistics")
     
-    # Numerical columns statistics
+    # Analyze numerical columns
     numerical_cols = df.select_dtypes(include=[np.number]).columns
     if len(numerical_cols) > 0:
         st.subheader("Numerical Variables")
         st.dataframe(df[numerical_cols].describe(), use_container_width=True)
     
-    # Categorical columns statistics
+    # Analyze categorical columns
     categorical_cols = df.select_dtypes(include=['object', 'category']).columns
     if len(categorical_cols) > 0:
         st.subheader("Categorical Variables")
@@ -145,14 +218,28 @@ def show_descriptive_statistics(df):
                     st.write(f"Most frequent: {df[col].mode().iloc[0] if not df[col].mode().empty else 'N/A'}")
                     st.write(f"Missing values: {df[col].isnull().sum()}")
 
+# =============================================================================
+# MISSING VALUES ANALYSIS FUNCTIONS
+# =============================================================================
+
 def show_missing_values_analysis(df):
+    """
+    Analyze and visualize missing values in the dataset.
+    Provides comprehensive statistics and visual representation of missing data.
+    
+    Args:
+        df (pd.DataFrame): Input dataframe to analyze
+    """
     st.header("Missing Values Analysis")
     
+    # Get missing values information
     missing_data = handle_missing_values(df)
     
+    # Display results based on missing data presence
     if missing_data['total_missing'] == 0:
         st.success("🎉 No missing values found in the dataset!")
     else:
+        # Display missing values metrics
         col1, col2 = st.columns(2)
         
         with col1:
@@ -165,13 +252,14 @@ def show_missing_values_analysis(df):
             missing_by_col = missing_by_col[missing_by_col > 0].sort_values(ascending=False)
             
             if not missing_by_col.empty:
+                # Create detailed missing values table
                 st.dataframe(pd.DataFrame({
                     'Column': missing_by_col.index,
                     'Missing Count': missing_by_col.values,
                     'Percentage': (missing_by_col.values / len(df) * 100).round(2)
                 }))
                 
-                # Visualization of missing values
+                # Visualize missing values distribution
                 fig, ax = plt.subplots(figsize=(10, 6))
                 missing_by_col.plot(kind='bar', ax=ax)
                 ax.set_title('Missing Values by Column')
@@ -181,9 +269,21 @@ def show_missing_values_analysis(df):
                 st.pyplot(fig)
                 plt.close()
 
+# =============================================================================
+# VISUALIZATION FUNCTIONS
+# =============================================================================
+
 def show_visualizations(df):
+    """
+    Provide interactive visualization options including histograms, box plots,
+    scatter plots, correlation heatmaps, and distribution plots.
+    
+    Args:
+        df (pd.DataFrame): Input dataframe to visualize
+    """
     st.header("Data Visualizations")
     
+    # Identify column types for visualization options
     numerical_cols = df.select_dtypes(include=[np.number]).columns.tolist()
     categorical_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
     
@@ -191,11 +291,13 @@ def show_visualizations(df):
         st.warning("No suitable columns found for visualization.")
         return
     
+    # Visualization type selection
     viz_type = st.selectbox(
         "Select visualization type:",
         ["Histograms", "Box Plots", "Scatter Plots", "Correlation Heatmap", "Distribution Plots"]
     )
     
+    # Handle histogram visualization
     if viz_type == "Histograms":
         if numerical_cols:
             selected_cols = st.multiselect(
@@ -213,6 +315,7 @@ def show_visualizations(df):
         else:
             st.warning("No numerical columns available for histograms.")
     
+    # Handle box plot visualization
     elif viz_type == "Box Plots":
         if numerical_cols:
             selected_cols = st.multiselect(
@@ -229,6 +332,7 @@ def show_visualizations(df):
         else:
             st.warning("No numerical columns available for box plots.")
     
+    # Handle scatter plot visualization
     elif viz_type == "Scatter Plots":
         if len(numerical_cols) >= 2:
             col1, col2 = st.columns(2)
@@ -239,6 +343,7 @@ def show_visualizations(df):
             with col2:
                 y_col = st.selectbox("Select Y-axis:", [col for col in numerical_cols if col != x_col])
             
+            # Optional color coding by categorical variable
             color_col = None
             if categorical_cols:
                 color_col = st.selectbox("Color by (optional):", [None] + categorical_cols)
@@ -251,6 +356,7 @@ def show_visualizations(df):
         else:
             st.warning("Need at least 2 numerical columns for scatter plots.")
     
+    # Handle correlation heatmap visualization
     elif viz_type == "Correlation Heatmap":
         if len(numerical_cols) >= 2:
             selected_cols = st.multiselect(
@@ -270,6 +376,7 @@ def show_visualizations(df):
         else:
             st.warning("Need at least 2 numerical columns for correlation analysis.")
     
+    # Handle distribution plot visualization
     elif viz_type == "Distribution Plots":
         all_cols = numerical_cols + categorical_cols
         if all_cols:
@@ -281,9 +388,21 @@ def show_visualizations(df):
                     st.pyplot(fig)
                     plt.close(fig)
 
+# =============================================================================
+# TARGETED ANALYSIS FUNCTIONS
+# =============================================================================
+
 def show_targeted_analysis(df):
+    """
+    Provide targeted analysis options including column summaries, outlier detection,
+    unique values analysis, and data type analysis.
+    
+    Args:
+        df (pd.DataFrame): Input dataframe to analyze
+    """
     st.header("Targeted Analysis")
     
+    # Identify column types for analysis
     numerical_cols = df.select_dtypes(include=[np.number]).columns.tolist()
     categorical_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
     all_cols = numerical_cols + categorical_cols
@@ -292,11 +411,13 @@ def show_targeted_analysis(df):
         st.warning("No columns available for analysis.")
         return
     
+    # Analysis type selection
     analysis_type = st.selectbox(
         "Select analysis type:",
         ["Column Summary", "Outlier Detection", "Unique Values Analysis", "Data Type Analysis"]
     )
     
+    # Handle column summary analysis
     if analysis_type == "Column Summary":
         selected_col = st.selectbox("Select column:", all_cols)
         
@@ -326,6 +447,7 @@ def show_targeted_analysis(df):
                     for value, count in top_values.items():
                         st.write(f"{value}: {count}")
     
+    # Handle outlier detection analysis
     elif analysis_type == "Outlier Detection":
         if numerical_cols:
             selected_col = st.selectbox("Select numerical column:", numerical_cols)
@@ -334,6 +456,7 @@ def show_targeted_analysis(df):
                 method = st.selectbox("Outlier detection method:", ["IQR", "Z-Score"])
                 
                 if method == "IQR":
+                    # Calculate IQR-based outliers
                     Q1 = df[selected_col].quantile(0.25)
                     Q3 = df[selected_col].quantile(0.75)
                     IQR = Q3 - Q1
@@ -347,7 +470,8 @@ def show_targeted_analysis(df):
                     st.write(f"Number of outliers: {len(outliers)}")
                     st.write(f"Percentage of outliers: {len(outliers)/len(df)*100:.2f}%")
                 
-                else:  # Z-Score
+                else:  # Z-Score method
+                    # Calculate Z-score based outliers
                     z_scores = np.abs((df[selected_col] - df[selected_col].mean()) / df[selected_col].std())
                     threshold = st.slider("Z-Score threshold:", 2.0, 4.0, 3.0, 0.1)
                     outliers = df[z_scores > threshold]
@@ -357,12 +481,14 @@ def show_targeted_analysis(df):
                     st.write(f"Number of outliers: {len(outliers)}")
                     st.write(f"Percentage of outliers: {len(outliers)/len(df)*100:.2f}%")
                 
+                # Option to display outlier values
                 if len(outliers) > 0:
                     if st.checkbox("Show outlier values"):
                         st.dataframe(outliers[[selected_col]], use_container_width=True)
         else:
             st.warning("No numerical columns available for outlier detection.")
     
+    # Handle unique values analysis
     elif analysis_type == "Unique Values Analysis":
         selected_col = st.selectbox("Select column:", all_cols)
         
@@ -375,6 +501,7 @@ def show_targeted_analysis(df):
             st.write(f"Total values: {total_values}")
             st.write(f"Uniqueness ratio: {unique_values/total_values:.2f}")
             
+            # Display appropriate level of detail based on unique values count
             if unique_values <= 20:
                 st.write("**All unique values:**")
                 value_counts = df[selected_col].value_counts()
@@ -392,6 +519,7 @@ def show_targeted_analysis(df):
                     'Percentage': (value_counts.values / total_values * 100).round(2)
                 }))
     
+    # Handle data type analysis
     elif analysis_type == "Data Type Analysis":
         st.subheader("Data Type Distribution")
         
@@ -405,7 +533,7 @@ def show_targeted_analysis(df):
                 st.write(f"{dtype}: {count} columns")
         
         with col2:
-            # Create a simple bar chart for data types
+            # Visualize data type distribution
             fig, ax = plt.subplots(figsize=(8, 6))
             type_counts.plot(kind='bar', ax=ax)
             ax.set_title('Distribution of Data Types')
@@ -415,6 +543,7 @@ def show_targeted_analysis(df):
             st.pyplot(fig)
             plt.close()
         
+        # Display detailed column information
         st.subheader("Detailed Column Information")
         detailed_info = pd.DataFrame({
             'Column': df.columns,
@@ -424,6 +553,10 @@ def show_targeted_analysis(df):
             'Unique Values': [df[col].nunique() for col in df.columns]
         })
         st.dataframe(detailed_info, use_container_width=True)
+
+# =============================================================================
+# APPLICATION ENTRY POINT
+# =============================================================================
 
 if __name__ == "__main__":
     main()
